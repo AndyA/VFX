@@ -52,4 +52,4 @@ def main(src: str):
 
 
 if __name__ == "__main__":
-    main("tmp/PC000003.mov")
+    main("media/PC000003.mov")
