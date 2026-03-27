@@ -21,7 +21,7 @@ def main(src: str):
         detectShadows=True,
     )
 
-    img_num = 0
+    img_num = -500
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -32,11 +32,14 @@ def main(src: str):
         fgmask = fgbg.apply(frame)
         mask1 = dilate(fgmask, kernel_size=3, iterations=1)
         mask2 = erode(mask1, kernel_size=5, iterations=1)
-        mask3 = dilate(mask2, kernel_size=3, iterations=1)
+        mask3 = dilate(mask2, kernel_size=5, iterations=1)
         mask4 = cv2.GaussianBlur(mask3, (3, 3), 0)
         rgba[:, :, 3] = mask4
-        cv2.imwrite(f"tmp/frame{img_num:06d}.png", rgba)
-        print(f"Saved frame{img_num:06d}.png")
+        if img_num >= 0:
+            cv2.imwrite(f"tmp/frame{img_num:06d}.png", rgba)
+            print(f"Saved frame{img_num:06d}.png")
+        else:
+            print(f"Skipping {img_num}")
         img_num += 1
 
         # cv2.imshow("frame", rgba)
