@@ -34,9 +34,9 @@ def main(src: str, out: str):
 
         fgmask = fgbg.apply(frame)
         mask1 = dilate(fgmask, kernel_size=3, iterations=1)
-        mask2 = erode(mask1, kernel_size=5, iterations=1)
+        mask2 = erode(mask1, kernel_size=7, iterations=1)
         mask3 = dilate(mask2, kernel_size=2, iterations=1)
-        mask4 = cv2.GaussianBlur(mask3, (5, 5), 0)
+        mask4 = cv2.GaussianBlur(mask3, (9, 9), 0)
         rgba[:, :, 3] = mask4
         out_name = os.path.join(out, f"frame{img_num:06d}.png")
         if img_num >= 0:
