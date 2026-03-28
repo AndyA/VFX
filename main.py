@@ -19,7 +19,7 @@ def main(src: str, out: str):
     cap = cv2.VideoCapture(src)
 
     fgbg = cv2.createBackgroundSubtractorMOG2(
-        history=5000,
+        history=500,
         varThreshold=16,
         detectShadows=True,
     )
@@ -32,12 +32,13 @@ def main(src: str, out: str):
 
         rgba = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA)
 
-        fgmask = fgbg.apply(frame)
-        mask1 = dilate(fgmask, kernel_size=3, iterations=1)
-        mask2 = erode(mask1, kernel_size=7, iterations=1)
-        mask3 = dilate(mask2, kernel_size=2, iterations=1)
-        mask4 = cv2.GaussianBlur(mask3, (9, 9), 0)
-        rgba[:, :, 3] = mask4
+        mask = fgbg.apply(frame)
+        mask = dilate(mask, kernel_size=3, iterations=1)
+        mask = erode(mask, kernel_size=7, iterations=1)
+        mask = dilate(mask, kernel_size=2, iterations=1)
+        mask = cv2.GaussianBlur(mask, (9, 9), 0)
+        rgba[:, :, 3] = mask
+
         out_name = os.path.join(out, f"frame{img_num:06d}.png")
         if img_num >= 0:
             cv2.imwrite(out_name, rgba)
